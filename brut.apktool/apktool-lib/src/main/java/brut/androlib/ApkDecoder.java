@@ -70,6 +70,10 @@ public class ApkDecoder {
         mResTable = null;
     }
 
+	public static ExtFile getApkFile() {
+		return mApkFile;
+	}
+
     public void setOutDir(File outDir) throws AndrolibException {
         mOutDir = outDir;
     }
@@ -462,7 +466,7 @@ public class ApkDecoder {
 
     private final static Logger LOGGER = Logger.getLogger(Androlib.class.getName());
 
-    private ExtFile mApkFile;
+    private static ExtFile mApkFile;
     private File mOutDir;
     private ResTable mResTable;
     private short mDecodeSources = DECODE_SOURCES_SMALI;

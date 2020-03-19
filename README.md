@@ -1,4 +1,8 @@
 ### Apktool
+
+**部分报错修复见**
+https://blog.csdn.net/lynnchurch/article/details/95100451?utm_source=distribute.pc_relevant.none-task
+
 **This is the repository for Apktool. If you are looking for the Apktool website. Click [here](https://github.com/iBotPeaches/Apktool/tree/gh-pages).**
 
 [![Join the chat at https://gitter.im/iBotPeaches/Apktool](https://badges.gitter.im/iBotPeaches/Apktool.svg)](https://gitter.im/iBotPeaches/Apktool?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)

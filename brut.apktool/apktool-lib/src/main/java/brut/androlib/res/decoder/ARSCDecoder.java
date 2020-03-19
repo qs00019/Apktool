@@ -19,8 +19,11 @@ package brut.androlib.res.decoder;
 import android.util.TypedValue;
 import brut.androlib.Androlib;
 import brut.androlib.AndrolibException;
+import brut.androlib.ApkDecoder;
 import brut.androlib.res.data.*;
 import brut.androlib.res.data.value.*;
+import brut.directory.Directory;
+import brut.directory.DirectoryException;
 import brut.util.Duo;
 import brut.androlib.res.data.ResTable;
 import brut.util.ExtDataInput;
@@ -182,7 +185,7 @@ public class ARSCDecoder {
 
             type = nextChunk().type;
 
-            addMissingResSpecs();
+           //addMissingResSpecs();
         }
     }
 
@@ -294,6 +297,21 @@ public class ARSCDecoder {
 
         ResID resId = new ResID(mResId);
         ResResSpec spec;
+
+		// add Could not decode file
+        if (value instanceof ResFileValue) {
+			String valueStr = value.toString();
+			Directory apkDir;
+			try {
+				apkDir = ApkDecoder.getApkFile().getDirectory();
+			} catch (DirectoryException e) {
+				throw new AndrolibException(e.getMessage());
+			}
+			if (!apkDir.containsFile(valueStr)) {
+				return;
+			}
+		}
+
         if (mPkg.hasResSpec(resId)) {
             spec = mPkg.getResSpec(resId);
 

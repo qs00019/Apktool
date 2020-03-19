@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ResResSpec {
     private final ResID mId;
-    private final String mName;
+    private String mName;
     private final ResPackage mPackage;
     private final ResTypeSpec mType;
     private final Map<ResConfigFlags, ResResource> mResources = new LinkedHashMap<ResConfigFlags, ResResource>();
@@ -99,6 +99,10 @@ public class ResResSpec {
     public String getName() {
         return StringUtils.replace(mName, "\"", "q");
     }
+
+	public void setName(String name) {
+		mName = name;
+	}
 
     public ResPackage getPackage() {
         return mPackage;

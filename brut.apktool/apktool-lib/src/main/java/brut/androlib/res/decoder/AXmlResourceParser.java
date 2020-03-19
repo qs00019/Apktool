@@ -19,7 +19,9 @@ package brut.androlib.res.decoder;
 import android.content.res.XmlResourceParser;
 import android.util.TypedValue;
 import brut.androlib.AndrolibException;
+import brut.androlib.err.UndefinedResObject;
 import brut.androlib.res.data.ResID;
+import brut.androlib.res.data.ResResSpec;
 import brut.androlib.res.xml.ResXmlEncoders;
 import brut.util.ExtDataInput;
 import com.google.common.io.LittleEndianDataInputStream;
@@ -293,16 +295,29 @@ public class AXmlResourceParser implements XmlResourceParser {
         // unless the pkgId of the resource is private. We will grab the non-standard one.
         String value = m_strings.getString(namespace);
 
-        if (value.length() == 0) {
-            ResID resourceId = new ResID(getAttributeNameResource(index));
-            if (resourceId.package_ == PRIVATE_PKG_ID) {
-                value = getNonDefaultNamespaceUri();
-            } else {
-                value = android_ns;
-            }
-        }
+		// some attributes will return "", we must rely on the resource_id and
+		// refer to the frameworks
+		// to match the resource id to the name. ex: 0x101021C = versionName
 
-        return value;
+		if (value.length() == 0) {
+			try {
+				value = mAttrDecoder.decodeManifestAttr(getAttributeNameResource(index));
+			} catch (AndrolibException e) {
+				value = "";
+			}
+		}
+		try {
+			ResID resID = new ResID(getAttributeNameResource(index));
+			if (mAttrDecoder.getCurrentPackage().hasResSpec(resID)) {
+				ResResSpec resSpec = mAttrDecoder.getCurrentPackage().getResSpec(resID);
+				resSpec.setName(value);
+			}
+		} catch (UndefinedResObject e) {
+			e.printStackTrace();
+		} catch (AndrolibException e) {
+			e.printStackTrace();
+		}
+		return value;
     }
 
     private String getNonDefaultNamespaceUri() {
