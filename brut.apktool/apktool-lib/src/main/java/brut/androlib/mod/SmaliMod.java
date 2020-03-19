@@ -83,8 +83,10 @@ public class SmaliMod {
         smaliParser.smali_file_return result = parser.smali_file();
 
         if (parser.getNumberOfSyntaxErrors() > 0 || lexer.getNumberOfSyntaxErrors() > 0) {
-            is.close();
-            reader.close();
+			IOUtils.closeQuietly(is);
+			IOUtils.closeQuietly(reader);
+            //is.close();
+            //reader.close();
             return false;
         }
 
@@ -99,8 +101,10 @@ public class SmaliMod {
         dexGen.setDexBuilder(dexBuilder);
         dexGen.smali_file();
 
-        is.close();
-        reader.close();
+        IOUtils.closeQuietly(is);
+        IOUtils.closeQuietly(reader);
+        //is.close();
+        //reader.close();
 
         return dexGen.getNumberOfSyntaxErrors() == 0;
     }
