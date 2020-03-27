@@ -24,6 +24,7 @@ import java.io.*;
 import java.util.logging.Logger;
 
 import org.antlr.runtime.RecognitionException;
+import org.apache.commons.io.IOUtils;
 import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.writer.builder.DexBuilder;
 import org.jf.dexlib2.writer.io.FileDataStore;
@@ -80,7 +81,7 @@ public class SmaliBuilder {
         } else {
             LOGGER.warning("Unknown file type, ignoring: " + inFile);
         }
-        inStream.close();
+        IOUtils.closeQuietly(inStream);
     }
 
     private final ExtFile mSmaliDir;

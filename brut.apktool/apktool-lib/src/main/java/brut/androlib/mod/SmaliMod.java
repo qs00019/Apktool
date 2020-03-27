@@ -33,7 +33,9 @@ public class SmaliMod {
                                             boolean printTokens, File smaliFile) throws IOException, RuntimeException, RecognitionException {
 
         InputStream is = new ByteArrayInputStream(smali.getBytes());
-        return assembleSmaliFile(is, dexBuilder, apiLevel, verboseErrors, printTokens, smaliFile);
+        boolean reuslt =  assembleSmaliFile(is, dexBuilder, apiLevel, verboseErrors, printTokens, smaliFile);
+        IOUtils.closeQuietly(is);
+        return reuslt;
     }
 
     public static boolean assembleSmaliFile(InputStream is,DexBuilder dexBuilder, int apiLevel, boolean verboseErrors,
@@ -45,8 +47,7 @@ public class SmaliMod {
 
         OutputStream os = new FileOutputStream(tmp);
         IOUtils.copy(is, os);
-        os.close();
-
+        IOUtils.closeQuietly(os);
         return assembleSmaliFile(tmp,dexBuilder, apiLevel, verboseErrors, printTokens);
     }
 
@@ -83,8 +84,8 @@ public class SmaliMod {
         smaliParser.smali_file_return result = parser.smali_file();
 
         if (parser.getNumberOfSyntaxErrors() > 0 || lexer.getNumberOfSyntaxErrors() > 0) {
-			IOUtils.closeQuietly(is);
 			IOUtils.closeQuietly(reader);
+            IOUtils.closeQuietly(is);
             //is.close();
             //reader.close();
             return false;
@@ -101,8 +102,8 @@ public class SmaliMod {
         dexGen.setDexBuilder(dexBuilder);
         dexGen.smali_file();
 
-        IOUtils.closeQuietly(is);
         IOUtils.closeQuietly(reader);
+        IOUtils.closeQuietly(is);
         //is.close();
         //reader.close();
 
